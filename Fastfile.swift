@@ -54,7 +54,7 @@ class Fastfile: LaneFile {
         o.deploy_mode = .development
         
         if o.use_upload_appbox == nil { o.use_upload_appbox = true }
-        if o.use_git_push == nil { o.use_git_push = true }
+        if o.use_git_push == nil { o.use_git_push = false }
         
         customLane(withOptions: o)
     }
@@ -66,7 +66,7 @@ class Fastfile: LaneFile {
         var o: Options = options ?? Options()
         o.deploy_mode = .testflight
         
-        if o.use_git_push == nil { o.use_git_push = true }
+        if o.use_git_push == nil { o.use_git_push = false }
         
         customLane(withOptions: o)
     }
@@ -78,7 +78,7 @@ class Fastfile: LaneFile {
         var o: Options = options ?? Options()
         o.deploy_mode = .appstore
        
-        if o.use_git_push == nil { o.use_git_push = true }
+        if o.use_git_push == nil { o.use_git_push = false }
         
         customLane(withOptions: o)
     }
@@ -113,10 +113,12 @@ class Fastfile: LaneFile {
         uploadToAppStoreLane(withOptions: options)
         // step.7 - dsym
         uploadDSYMsLane(withOptions: options)
+        /* 당분간 기능 잠금
         // step.8 - send message
         sendMessageToTeamsLane(withOptions: options)
         // step.9 - git commit & push
         gitCommitAndPushLane(withOptions: options)
+         */
     }
     
     // MARK: - biz Lanes
