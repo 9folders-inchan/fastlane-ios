@@ -275,8 +275,8 @@ class Fastfile: LaneFile {
     
     func uploadToAppBoxLane(withOptions options: Options?) {
         if options?.use_upload_appbox == true {
-            let user = "github@9folders.com" // TODO: env에서 ....
             verbose(message: "### -- START APPBOX")
+            let user = "github@9folders.com" // TODO: env에서 ....
             appbox(emails: user, keepSameLink: .userDefined(true))
             let shareURL = laneContext().APPBOX_SHARE_URL
             verbose(message: "### -- FINISH APPBOX ... Share URL: \(shareURL)")
@@ -287,12 +287,12 @@ class Fastfile: LaneFile {
         switch options?.deploy_mode {
         case .appstore:
             verbose(message: "*** -- START UPLOAD TO APPSTORE")
-            uploadToAppStore(apiKeyPath: .userDefined("fastlane/495UZVD486.json"))
+            uploadToAppStore(apiKeyPath: .userDefined(ENV.fastlane_itc_apikey_path.value))
             verbose(message: "*** -- FINISH UPLOAD TO APPSTORE")
             break
         case .testflight:
             verbose(message: "*** -- START UPLOAD TO TESTFLIGHT")
-            pilot(apiKeyPath: .userDefined("fastlane/495UZVD486.json"))
+            pilot(apiKeyPath: .userDefined(ENV.fastlane_itc_apikey_path.value))
             verbose(message: "*** -- FINISH UPLOAD TO TESTFLIGHT")
             break
         default: break
