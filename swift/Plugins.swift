@@ -452,7 +452,7 @@ let command = RubyCommand(commandID: "", methodName: "increment_version_number_i
 */
 public func teams(title: String,
                   message: String,
-                  facts: [Any],
+                  facts: [String],
                   teamsUrl: String,
                   themeColor: String = "0078D7") {
 let titleArg = RubyCommand.Argument(name: "title", value: title, type: nil)
