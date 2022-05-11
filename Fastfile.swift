@@ -116,9 +116,10 @@ class Fastfile: LaneFile {
         /* 당분간 기능 잠금
         // step.8 - send message
         sendMessageToTeamsLane(withOptions: options)
+         */
         // step.9 - git commit & push
         gitCommitAndPushLane(withOptions: options)
-         */
+         
     }
     
     // MARK: - biz Lanes
@@ -389,7 +390,7 @@ class Fastfile: LaneFile {
         var o = options ?? Options()
         if isEmptyOptions || isEmptyMessage {
             Versioning.Fetch.xcodeproj { version, buildNumber in
-                let defaultMessage = "Commit v\(version)(\(buildNumber)"
+                let defaultMessage = "deply v\(version)(\(buildNumber)"
                 o.gitCommitMessage = defaultMessage
                 self.gitCommitAndPush(withOptions: o)
             }
