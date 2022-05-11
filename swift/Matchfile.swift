@@ -23,14 +23,6 @@ public class Matchfile: MatchfileProtocol {
     
     public var appIdentifier: [String] {
         return [ENV.app_identifier.value] + ENV.app_extention_identifiers.listValue
-//        return [
-//            "com.rework.app",
-//            "com.rework.app.extension-share",
-//            "com.rework.app.extension-notification",
-//            "com.rework.app.extension-spotlight",
-//            "com.rework.app.extension-widget-upnext",
-//            "com.rework.app.extension-widget-intent"
-//        ]
     }
     
     public var gitUrl: String {

@@ -38,7 +38,16 @@ struct Versioning {
         }
         
         static func initailize(_ initalValue: String = "1") {
-            Self.set(initalValue)
+            Versioning.Fetch.xcodeproj { version, buildNumber in
+                let newBuild = String(format: "%02d", Int(initalValue) ?? 1)
+                
+                let versionSplits = version.split(separator: ".")                
+                let newVersion = versionSplits
+                    .map({ String(format: $0 == versionSplits.first ? "%d" : "%02d", Int(initalValue) ?? 1) })
+                    .joined()
+            
+                Self.set(newVersion.appending(newBuild))
+            }
         }
     }
 

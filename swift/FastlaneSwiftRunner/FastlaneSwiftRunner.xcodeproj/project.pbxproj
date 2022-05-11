@@ -53,7 +53,7 @@
 		7059B9414BF2DEA18BE45FD2 /* FastlaneRunnerCopySigned */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = $SRCROOT/../..;
+			dstPath = "$SRCROOT/../..";
 			dstSubfolderSpec = 0;
 			files = (
 				D2B5C4FD5287BC03B69C7B65 /* FastlaneRunner in FastlaneRunnerCopySigned */,

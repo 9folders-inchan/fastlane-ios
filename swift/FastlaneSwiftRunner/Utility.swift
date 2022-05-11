@@ -14,7 +14,8 @@ enum ENV: String, CaseIterable {
     
     // 프로젝트 정보
     case app_identifier, app_extention_identifiers
-    case project, workspace
+    case project
+    case workspace
     case scheme
     
     // Match 정보

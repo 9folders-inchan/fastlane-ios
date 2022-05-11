@@ -7,7 +7,7 @@ cd $SRC_PATH
 echo ""
 echo "[@] Initailize Fastlane Path: $PWD"
 echo ""
-FILE_NAMES=(".env" ".env.rework" "Gemfile")
+FILE_NAMES=("resources/.env" "resources/.env.rework" "Gemfile")
 echo "[@] Copying... required file [${FILE_NAMES[@]}]"
 echo ""
 
