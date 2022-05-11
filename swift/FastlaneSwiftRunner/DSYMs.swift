@@ -19,7 +19,7 @@ struct DSYMs {
     
     static func upload(_ selectVersion: String?) {
         downloadDsyms(apiKeyPath: .userDefined(ENV.fastlane_itc_apikey_path.value), username: appleID, appIdentifier: appIdentifier, teamId: .userDefined(ENV.fastlane_itc_team_id.value), version: .userDefined(selectVersion))
-        uploadSymbolsToCrashlytics(dsymPath: "")
+        laneContext().DSYM_PATHS.forEach({ uploadSymbolsToCrashlytics(dsymPath: $0) })
         cleanBuildArtifacts()
     }
 }
