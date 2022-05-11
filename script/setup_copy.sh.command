@@ -12,5 +12,5 @@ echo "[@] Copying... required file [${FILE_NAMES[@]}]"
 echo ""
 
 for file_name in "${FILE_NAMES[@]}"; do
-    cp -R ./"resources"/$file_name ..
+    cp -R ./"resource"/$file_name ..
 done
