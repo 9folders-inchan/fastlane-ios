@@ -382,7 +382,7 @@ class Fastfile: LaneFile {
     }
  
     // MARK: - Send Message
-
+    // test fastlane gitCommitAndPushLane use_git_push:true --env rework --verbose
     func gitCommitAndPushLane(withOptions options: Options?) {
         
         let isEmptyOptions = options == nil
@@ -393,15 +393,15 @@ class Fastfile: LaneFile {
             Versioning.Fetch.xcodeproj { version, buildNumber in
                 let defaultMessage = "deply v\(version)(\(buildNumber)"
                 o.gitCommitMessage = defaultMessage
-                self.gitCommitAndPush(withOptions: o)
+                self.gitUpdate(withOptions: o)
             }
         }
         else {
-            self.gitCommitAndPush(withOptions: o)
+            self.gitUpdate(withOptions: o)
         }
     }
     
-    func gitCommitAndPush(withOptions options: Options?) {
+    func gitUpdate(withOptions options: Options?) {
         if let gitCommitMessage = options?.gitCommitMessage, gitCommitMessage.isEmpty == false {
             let prefix = "[*] Fastlane - "
             let message = prefix + gitCommitMessage
