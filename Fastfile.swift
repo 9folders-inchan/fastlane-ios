@@ -113,10 +113,8 @@ class Fastfile: LaneFile {
         uploadToAppStoreLane(withOptions: options)
         // step.7 - dsym
         uploadDSYMsLane(withOptions: options)
-        /* 당분간 기능 잠금
         // step.8 - send message
         sendMessageToTeamsLane(withOptions: options)
-         */
         // step.9 - git commit & push
         gitCommitAndPushLane(withOptions: options)
          
@@ -349,7 +347,10 @@ class Fastfile: LaneFile {
     
     
     // MARK: - Send Message
-    
+    /// - Test ...
+    ///     * $ fastlane sendMessageToTeams deploy_mode:testflight --env rework --verbose
+    ///
+
     func sendMessageToTeamsLane(withOptions options: Options?) {
         guard let options = options else {
             verbose(message: "sendMessageToTeams option is nil")
