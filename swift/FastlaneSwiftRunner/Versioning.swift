@@ -43,7 +43,7 @@ struct Versioning {
                 
                 let versionSplits = version.split(separator: ".")                
                 let newVersion = versionSplits
-                    .map({ String(format: $0 == versionSplits.first ? "%d" : "%02d", Int(initalValue) ?? 1) })
+                    .map({ String(format: $0 == versionSplits.first ? "%d" : "%02d", Int($0) ?? 1) })
                     .joined()
             
                 Self.set(newVersion.appending(newBuild))
