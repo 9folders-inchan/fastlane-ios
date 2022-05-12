@@ -412,8 +412,14 @@ class Fastfile: LaneFile {
             let prefix = "[*] Fastlane - "
             let message = prefix + gitCommitMessage
             gitCommit(path: ["Okestra.xcodeproj/project.pbxproj"], message: message)
-            pushToGitRemote()
-            //pushToGitRemote(remoteBranch: .userDefined("refs/remotes/origin/test/fastlaneSwift"))
+            if let gitBranch = options?.gitBranch {
+                pushToGitRemote(remoteBranch: .userDefined(gitBranch))
+            }
+            else {
+                pushToGitRemote()
+            }
+            
+            
         }
         if let gitTagMessage = options?.gitTagMessage, gitTagMessage.isEmpty == false {
             verbose(message: "git tag: \(gitTagMessage)")

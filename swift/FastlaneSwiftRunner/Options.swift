@@ -135,6 +135,12 @@ extension Options {
         }
     }
 
+    var gitBranch: String? {
+        get {
+            return self["gitBranch"]
+        }
+    }
+    
     /// dsyms - 다운받을 최소 버전
     var dsyms_min_version: String? {
         get {
