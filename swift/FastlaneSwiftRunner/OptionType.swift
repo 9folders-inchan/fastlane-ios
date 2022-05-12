@@ -144,7 +144,7 @@ enum Versioning_Mode {
         let version = options?["version"]
         let build_number = options?["build_number"]
         
-        if version != nil || build_number != nil  {
+        if let version = version, let build_number = build_number, version.count > 0, build_number.count > 0  {
             self = .manual((version: version, build_number: build_number))
         }
         else if let versioning_mode = options?["versioning_mode"]?.lowercased() {
