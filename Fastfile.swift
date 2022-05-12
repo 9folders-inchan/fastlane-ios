@@ -40,8 +40,11 @@ class Fastfile: LaneFile {
     
     func testLane(withOptions options: Options?) {
         laneContext().printAll()
-        readyLane(withOptions: options)
-        //versioningLane(withOptions: options)
+        var o = options ?? Options()
+        o.use_git_push = true;
+        readyLane(withOptions: o)
+        versioningLane(withOptions: o)
+        gitCommitAndPushLane(withOptions: o)
     }
     
     // MARK: - Deploy lane
@@ -385,14 +388,16 @@ class Fastfile: LaneFile {
     // test fastlane gitCommitAndPushLane use_git_push:true --env rework --verbose
     func gitCommitAndPushLane(withOptions options: Options?) {
         
-        let isEmptyOptions = options == nil
-        let isEmptyMessage = options?.use_git_push == true && options?.gitCommitMessage?.isEmpty == true
+        guard options?.use_git_push == true else {
+            return
+        }
 
         var o = options ?? Options()
-        if isEmptyOptions || isEmptyMessage {
+        if options?.gitCommitMessage == nil || options?.gitCommitMessage?.isEmpty == true {
             Versioning.Fetch.xcodeproj { version, buildNumber in
-                let defaultMessage = "deply v\(version)(\(buildNumber)"
+                let defaultMessage = "deploy v\(version)(\(buildNumber))"
                 o.gitCommitMessage = defaultMessage
+                verbose(message: "git defaultMessage: \(defaultMessage)")
                 self.gitUpdate(withOptions: o)
             }
         }
@@ -403,14 +408,14 @@ class Fastfile: LaneFile {
     
     func gitUpdate(withOptions options: Options?) {
         if let gitCommitMessage = options?.gitCommitMessage, gitCommitMessage.isEmpty == false {
+            verbose(message: "git commit: \(gitCommitMessage)")
             let prefix = "[*] Fastlane - "
             let message = prefix + gitCommitMessage
-            verbose(message: "gitCommitMessage: \(message)")
             gitCommit(path: ["Okestra.xcodeproj/project.pbxproj"], message: message)
-            pushToGitRemote(remoteBranch: .userDefined("develop"))
+            pushToGitRemote(remoteBranch: .userDefined("test/fastlaneSwift"))
         }
         if let gitTagMessage = options?.gitTagMessage, gitTagMessage.isEmpty == false {
-            verbose(message: "gitTagMessage: \(gitTagMessage)")
+            verbose(message: "git tag: \(gitTagMessage)")
             pushGitTags(tag: .userDefined(gitTagMessage))
         }
     }
