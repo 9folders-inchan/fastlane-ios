@@ -409,8 +409,8 @@ class Fastfile: LaneFile {
     func gitUpdate(withOptions options: Options?) {
         if let gitCommitMessage = options?.gitCommitMessage, gitCommitMessage.isEmpty == false {
             verbose(message: "git commit: \(gitCommitMessage)")
-            let prefix = "[*] Fastlane - "
-            let message = prefix + gitCommitMessage
+            let prefix = "[*] Fastlane -"
+            let message = "\(prefix) \(gitCommitMessage)"
             gitCommit(path: ["Okestra.xcodeproj/project.pbxproj"], message: message)
             if let gitBranch = options?.gitBranch {
                 pushToGitRemote(remoteBranch: .userDefined(gitBranch))
