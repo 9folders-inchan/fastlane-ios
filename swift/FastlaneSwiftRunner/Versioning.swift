@@ -69,7 +69,8 @@ struct Versioning {
         }
         
         static func appstore(_ completion: Completion?) {
-            //getAppStoreVersionNumber(bundleId: .userDefined(appIdentifier))
+            getAppStoreVersionNumber(bundleId: .userDefined(appIdentifier))
+            completion?(laneContext().VERSION_NUMBER, laneContext().BUILD_NUMBER)
         }
     }
     

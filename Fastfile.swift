@@ -39,12 +39,14 @@ class Fastfile: LaneFile {
     // MARK: - test lanes
     
     func testLane(withOptions options: Options?) {
-        laneContext().printAll()
-        var o = options ?? Options()
-        o.use_git_push = true;
-        readyLane(withOptions: o)
-        versioningLane(withOptions: o)
-        gitCommitAndPushLane(withOptions: o)
+        //laneContext().printAll()
+        //var o = options ?? Options()
+        //o.use_git_push = true;
+        //readyLane(withOptions: o)
+        //versioningLane(withOptions: o)
+        Versioning.Fetch.appstore { version, buildNumber in
+            verbose(message: "ver: \(version), bn: \(buildNumber)")
+        }
     }
     
     // MARK: - Deploy lane
