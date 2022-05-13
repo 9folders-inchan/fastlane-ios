@@ -395,7 +395,7 @@ class Fastfile: LaneFile {
         var o = options ?? Options()
         if options?.gitCommitMessage == nil || options?.gitCommitMessage?.isEmpty == true {
             Versioning.Fetch.xcodeproj { version, buildNumber in
-                let defaultMessage = "deploy v\(version)(\(buildNumber))"
+                let defaultMessage = "Re:work v\(version) (\(buildNumber))"
                 o.gitCommitMessage = defaultMessage
                 verbose(message: "git defaultMessage: \(defaultMessage)")
                 self.gitUpdate(withOptions: o)
@@ -418,8 +418,6 @@ class Fastfile: LaneFile {
             else {
                 pushToGitRemote()
             }
-            
-            
         }
         if let gitTagMessage = options?.gitTagMessage, gitTagMessage.isEmpty == false {
             verbose(message: "git tag: \(gitTagMessage)")
