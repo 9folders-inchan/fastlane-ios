@@ -79,6 +79,14 @@ extension Collection where Self == LaneContextType {
         return self["BUILD_NUMBER"] as? String ?? ""
     }
     
+    var LATEST_TESTFLIGHT_VERSION: String {
+        return self["LATEST_TESTFLIGHT_VERSION"] as? String ?? ""
+    }
+
+    var LATEST_TESTFLIGHT_BUILD_NUMBER: String {
+        return self["LATEST_TESTFLIGHT_BUILD_NUMBER"] as? String ?? ""
+    }
+
     var DSYM_PATHS: [String] {
         return self["DSYM_PATHS"] as? [String] ?? []
     }
@@ -87,11 +95,13 @@ extension Collection where Self == LaneContextType {
         return self["APPBOX_SHARE_URL"] as? String ?? ""
     }
         
-    func printAll(_ tag: String? = nil) {
+    func printAll(_ tag: String? = nil, prefix: String = "LaneContext printAll") {
         var text = "\(self.description)"
         if let tag = tag, tag.isEmpty == false {
             text.insert(contentsOf:"<\(tag)>: ", at: text.startIndex)
         }
+
+        text.insert(contentsOf:"\(prefix) ", at: text.startIndex)
         verbose(message: text)
     }
 }

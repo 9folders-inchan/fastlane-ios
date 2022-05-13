@@ -57,20 +57,36 @@ struct Versioning {
         typealias Completion = (_ version: String, _ buildNumber: String) -> Void
         
         static func plist(_ completion: Completion?) {
-            getVersionNumberFromPlist(xcodeproj: .userDefined(project), target: .userDefined(scheme))
-            getBuildNumberFromPlist(xcodeproj: .userDefined(project), target: .userDefined(scheme))
-            completion?(laneContext().VERSION_NUMBER, laneContext().BUILD_NUMBER)
+            if laneContext().VERSION_NUMBER.isEmpty || laneContext().BUILD_NUMBER.isEmpty {
+                getVersionNumberFromPlist(xcodeproj: .userDefined(project), target: .userDefined(scheme))
+                getBuildNumberFromPlist(xcodeproj: .userDefined(project), target: .userDefined(scheme))
+                completion?(laneContext().VERSION_NUMBER, laneContext().BUILD_NUMBER)
+            }
+            else {
+                completion?(laneContext().VERSION_NUMBER, laneContext().BUILD_NUMBER)
+            }
         }
         
         static func xcodeproj(_ completion: Completion?) {
-            getVersionNumberFromXcodeproj(xcodeproj: .userDefined(project), target: .userDefined(scheme))
-            getBuildNumberFromXcodeproj(xcodeproj: .userDefined(project), target: .userDefined(scheme))
-            completion?(laneContext().VERSION_NUMBER, laneContext().BUILD_NUMBER)
+            if laneContext().VERSION_NUMBER.isEmpty || laneContext().BUILD_NUMBER.isEmpty {
+                getVersionNumberFromXcodeproj(xcodeproj: .userDefined(project), target: .userDefined(scheme))
+                getBuildNumberFromXcodeproj(xcodeproj: .userDefined(project), target: .userDefined(scheme))
+                completion?(laneContext().VERSION_NUMBER, laneContext().BUILD_NUMBER)
+            }
+            else {
+                completion?(laneContext().VERSION_NUMBER, laneContext().BUILD_NUMBER)
+            }
         }
         
         static func appstore(_ completion: Completion?) {
-            getAppStoreVersionNumber(bundleId: .userDefined(appIdentifier))
-            completion?(laneContext().VERSION_NUMBER, laneContext().BUILD_NUMBER)
+            if laneContext().LATEST_TESTFLIGHT_VERSION.isEmpty || laneContext().LATEST_TESTFLIGHT_BUILD_NUMBER.isEmpty {
+                latestTestflightBuildNumber(apiKeyPath: .userDefined(ENV.fastlane_itc_apikey_path.value), appIdentifier: appIdentifier, username: .userDefined(appleID), teamId: .userDefined(ENV.fastlane_itc_team_id.value))
+                completion?(laneContext().LATEST_TESTFLIGHT_VERSION, laneContext().LATEST_TESTFLIGHT_BUILD_NUMBER)
+
+            }
+            else {
+                completion?(laneContext().LATEST_TESTFLIGHT_VERSION, laneContext().LATEST_TESTFLIGHT_BUILD_NUMBER)
+            }
         }
     }
     
