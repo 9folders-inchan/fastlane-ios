@@ -416,10 +416,10 @@ class Fastfile: LaneFile {
             
             if let gitLocalBranch = options?.gitLocalBranch, let gitRemoteBranch = options?.gitRemoteBranch {
                 verbose(message: "git branch local: \(gitLocalBranch), remote: \(gitRemoteBranch)")
-                pushToGitRemote(localBranch: .userDefined(gitLocalBranch), remoteBranch: .userDefined(gitRemoteBranch))
+                //pushToGitRemote(localBranch: .userDefined(gitLocalBranch), remoteBranch: .userDefined(gitRemoteBranch))
             }
             else {
-                pushToGitRemote()
+                //pushToGitRemote()
             }
         }
         if let gitTagMessage = options?.gitTagMessage, gitTagMessage.isEmpty == false {
