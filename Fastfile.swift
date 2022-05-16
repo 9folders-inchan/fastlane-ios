@@ -409,14 +409,13 @@ class Fastfile: LaneFile {
     }
     
     func gitUpdate(withOptions options: Options?) {
-        
+        gitPull()
         if let gitCommitMessage = options?.gitCommitMessage, gitCommitMessage.isEmpty == false {
             verbose(message: "git commit: \(gitCommitMessage)")
             let prefix = "[*] Fastlane -"
             let message = "\(prefix) \(gitCommitMessage)"
             gitCommit(path: ["Okestra.xcodeproj/project.pbxproj"], message: message)
             gitBranch()
-            gitPull()
             let branchName = laneContext().GIT_BRANCH_ENV_VARS
             if branchName.isEmpty == false {
                 verbose(message: "git branch name: \(branchName)")
@@ -432,7 +431,6 @@ class Fastfile: LaneFile {
         }
         if let gitTagMessage = options?.gitTagMessage, gitTagMessage.isEmpty == false {
             verbose(message: "git tag: \(gitTagMessage)")
-            gitPull()
             pushGitTags(tag: .userDefined(gitTagMessage))
         }
     }
