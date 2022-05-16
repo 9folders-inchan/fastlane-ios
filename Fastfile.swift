@@ -42,7 +42,7 @@ class Fastfile: LaneFile {
         let o = options ?? Options()
         readyLane(withOptions: o)
         versioningLane(withOptions: o)
-        gitUpdate(withOptions: o)
+        gitCommitAndPushLane(withOptions: o)
 //        Versioning.Fetch.appstore { version, buildNumber in
 //            verbose(message: "ver: \(version), bn: \(buildNumber)")
 //        }
