@@ -94,7 +94,11 @@ extension Collection where Self == LaneContextType {
     var APPBOX_SHARE_URL: String {
         return self["APPBOX_SHARE_URL"] as? String ?? ""
     }
-        
+    
+    var GIT_BRANCH_ENV_VARS: String {
+        return self["GIT_BRANCH_ENV_VARS"] as? String ?? ""
+    }
+    
     func printAll(_ tag: String? = nil, prefix: String = "LaneContext printAll") {
         var text = "\(self.description)"
         if let tag = tag, tag.isEmpty == false {
