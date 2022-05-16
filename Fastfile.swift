@@ -408,7 +408,6 @@ class Fastfile: LaneFile {
     }
     
     func gitUpdate(withOptions options: Options?) {
-        gitPull()
         if let gitCommitMessage = options?.gitCommitMessage, gitCommitMessage.isEmpty == false {
             verbose(message: "git commit: \(gitCommitMessage)")
             let prefix = "[*] Fastlane -"
