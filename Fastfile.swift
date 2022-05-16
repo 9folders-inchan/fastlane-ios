@@ -409,20 +409,26 @@ class Fastfile: LaneFile {
     }
     
     func gitUpdate(withOptions options: Options?) {
+        
         if let gitCommitMessage = options?.gitCommitMessage, gitCommitMessage.isEmpty == false {
             verbose(message: "git commit: \(gitCommitMessage)")
             let prefix = "[*] Fastlane -"
             let message = "\(prefix) \(gitCommitMessage)"
             gitCommit(path: ["Okestra.xcodeproj/project.pbxproj"], message: message)
+            
             if let gitBranch = options?.gitBranch {
+                verbose(message: "git branch: \(gitBranch)")
+                gitPull()
                 pushToGitRemote(remoteBranch: .userDefined(gitBranch))
             }
             else {
+                gitPull()
                 pushToGitRemote()
             }
         }
         if let gitTagMessage = options?.gitTagMessage, gitTagMessage.isEmpty == false {
             verbose(message: "git tag: \(gitTagMessage)")
+            gitPull()
             pushGitTags(tag: .userDefined(gitTagMessage))
         }
     }
