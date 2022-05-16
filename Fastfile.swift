@@ -414,12 +414,7 @@ class Fastfile: LaneFile {
             let message = "\(prefix) \(gitCommitMessage)"
             gitCommit(path: ["Okestra.xcodeproj/project.pbxproj"], message: message)
             
-            let branchName = gitBranch()
-            if branchName.isEmpty == false {
-                verbose(message: "git branch name: \(branchName)")
-                pushToGitRemote(remoteBranch: .userDefined(branchName))
-            }
-            else if let gitBranch = options?.gitBranch {
+            if let gitBranch = options?.gitBranch {
                 verbose(message: "git branch: \(gitBranch)")
                 pushToGitRemote(remoteBranch: .userDefined(gitBranch))
             }
