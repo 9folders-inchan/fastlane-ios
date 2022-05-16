@@ -412,7 +412,7 @@ class Fastfile: LaneFile {
             verbose(message: "git commit: \(gitCommitMessage)")
             let prefix = "[*] Fastlane -"
             let message = "\(prefix) \(gitCommitMessage)"
-            gitCommit(path: ["Okestra.xcodeproj/project.pbxproj"], message: message)
+            //gitCommit(path: ["Okestra.xcodeproj/project.pbxproj"], message: message)
             
             if let gitBranch = options?.gitBranch {
                 verbose(message: "git branch: \(gitBranch)")
