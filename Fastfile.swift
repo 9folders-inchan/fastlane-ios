@@ -414,17 +414,17 @@ class Fastfile: LaneFile {
             let message = "\(prefix) \(gitCommitMessage)"
             gitCommit(path: ["Okestra.xcodeproj/project.pbxproj"], message: message)
             
-            if let gitBranch = options?.gitBranch {
-                verbose(message: "git branch: \(gitBranch)")
-                //pushToGitRemote(remoteBranch: .userDefined(gitBranch))
+            if let gitLocalBranch = options?.gitLocalBranch, let gitRemoteBranch = options?.gitRemoteBranch {
+                verbose(message: "git branch local: \(gitLocalBranch), remote: \(gitRemoteBranch)")
+                pushToGitRemote(localBranch: .userDefined(gitLocalBranch), remoteBranch: .userDefined(gitRemoteBranch))
             }
             else {
-                //pushToGitRemote()
+                pushToGitRemote()
             }
         }
         if let gitTagMessage = options?.gitTagMessage, gitTagMessage.isEmpty == false {
             verbose(message: "git tag: \(gitTagMessage)")
-            //pushGitTags(tag: .userDefined(gitTagMessage))
+            pushGitTags(tag: .userDefined(gitTagMessage))
         }
     }
 }

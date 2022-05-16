@@ -135,9 +135,15 @@ extension Options {
         }
     }
 
-    var gitBranch: String? {
+    var gitLocalBranch: String? {
         get {
-            return self["gitBranch"]
+            return self["git_local_branch"]
+        }
+    }
+    
+    var gitRemoteBranch: String? {
+        get {
+            return self["git_remote_branch"]
         }
     }
     
