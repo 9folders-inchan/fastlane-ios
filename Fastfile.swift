@@ -37,7 +37,6 @@ class Fastfile: LaneFile {
     
     
     // MARK: - test lanes
-    
     func testLane(withOptions options: Options?) {
         let o = options ?? Options()
         readyLane(withOptions: o)
@@ -98,6 +97,13 @@ class Fastfile: LaneFile {
         buildLane(withOptions: options)
         // step.3 - upload to appstore
         uploadToAppStoreLane(withOptions: options)
+    }
+    
+    func versioningAndGitPushLane(withOptions options: Options?) {
+        let o = options ?? Options()
+        readyLane(withOptions: o)
+        versioningLane(withOptions: o)
+        gitCommitAndPushLane(withOptions: o)
     }
     
     // MARK: - Custom lane
