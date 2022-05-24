@@ -121,13 +121,13 @@ class Fastfile: LaneFile {
         uploadToAppBoxLane(withOptions: options)
         // step.6 - upload to appstore
         uploadToAppStoreLane(withOptions: options)
-        // step.7 - dsym
-        uploadDSYMsLane(withOptions: options)
-        // step.8 - send message
+        // step.7 - send message
         sendMessageToTeamsLane(withOptions: options)
-        // step.9 - git commit & push
+        // step.8 - git commit & push
         gitCommitAndPushLane(withOptions: options)
-         
+        // step.9 - dsym
+        uploadDSYMsLane(withOptions: options)
+
     }
     
     // MARK: - biz Lanes
@@ -329,8 +329,13 @@ class Fastfile: LaneFile {
                 break
             case .latest:
                 verbose(message: "## uploadDSYMs: latest")
-                Versioning.Fetch.xcodeproj { version, buildNumber in
-                    DSYMs.upload(version)
+                if laneContext().DSYM_OUTPUT_PATH.isEmpty == false {
+                    uploadSymbolsToCrashlytics(dsymPath: laneContext().DSYM_OUTPUT_PATH)
+                }
+                else {
+                    Versioning.Fetch.xcodeproj { version, buildNumber in
+                        DSYMs.upload(version)
+                    }
                 }
                 break
             default:

@@ -90,6 +90,10 @@ extension Collection where Self == LaneContextType {
     var DSYM_PATHS: [String] {
         return self["DSYM_PATHS"] as? [String] ?? []
     }
+    
+    var DSYM_OUTPUT_PATH: String {
+        return self["DSYM_OUTPUT_PATH"] as? String ?? ""
+    }
 
     var APPBOX_SHARE_URL: String {
         return self["APPBOX_SHARE_URL"] as? String ?? ""
