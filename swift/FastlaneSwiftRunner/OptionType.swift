@@ -69,10 +69,10 @@ enum Build_Export_Method: String, OptionTypeProtocol, Equatable {
 enum Deploy_Mode: String, OptionTypeProtocol {
     case appstore, testflight, uploadOnly, adhoc, inhouse, development, buildOnly
 
-    private var name: String {
+    public var name: String {
         switch self {
-        case .appstore: return "앱스토어"
-        case .testflight: return "테스트 플라이트"
+        case .appstore: return "Appstore"
+        case .testflight: return "Testflgiht"
         case .uploadOnly: return "오직 업로드만"
         case .adhoc: return "Ad-hoc"
         case .inhouse: return "In-Houser"

@@ -74,9 +74,9 @@ class Fastfile: LaneFile {
         customLane(withOptions: o)
     }
     
-    /* Beta 배포 (Relase 빌드 -> AppStore 배포 -> 리뷰) **/
+    /* Relase 배포 (Relase 빌드 -> AppStore 배포 -> 리뷰) **/
     func releaseLane(withOptions options: Options?) {
-        desc("codeSigning -> versioning -> build -> upload(StoreConnect) -> store review -> -> upload dsyms -> sendToTeams")
+        desc("code signing -> versioning -> build -> upload(StoreConnect) -> store review -> -> upload dsyms -> sendToTeams")
         
         var o: Options = options ?? Options()
         o.deploy_mode = .appstore
@@ -90,7 +90,6 @@ class Fastfile: LaneFile {
     /* 프로젝트에 설정된 인증서, 프로비저닝으로 빌드 시도, 배포타입은 정해야함.**/
     func simpleLane(withOptions options: Options?) {
         desc("versioning -> build -> upload(StoreConnect) -> testflight")
-        
         // step.1 - increment version, build number
         versioningLane(withOptions: options)
         // step.2 - build
@@ -271,6 +270,7 @@ class Fastfile: LaneFile {
 
     func buildLane(withOptions options: Options?) {
         verbose(message: "### -- START BUILD")
+        
         buildIosApp(workspace: .userDefined(workspace),
                     scheme: .userDefined(scheme) ,
                     clean: .userDefined(true),
@@ -279,33 +279,37 @@ class Fastfile: LaneFile {
                     exportOptions: .userDefined(options?.deploy_mode.exportOptions),
                     //exportXcargs: .userDefined("-allowProvisioningUpdates"),
                     skipProfileDetection: .userDefined(true))
+        
         verbose(message: "### -- FINISH BUILD")
 	}
     
     func uploadToAppBoxLane(withOptions options: Options?) {
         if options?.use_upload_appbox == true {
             verbose(message: "### -- START APPBOX")
+            
             let user = "github@9folders.com" // TODO: env에서 ....
             appbox(emails: user, keepSameLink: .userDefined(true))
             let shareURL = laneContext().APPBOX_SHARE_URL
+            
             verbose(message: "### -- FINISH APPBOX ... Share URL: \(shareURL)")
         }
     }
     
     func uploadToAppStoreLane(withOptions options: Options?) {
+        let deploy_mode_name = options?.deploy_mode.name ?? "unknow"
+        verbose(message: "*** -- START UPLOAD TO \(deploy_mode_name)")
+
         switch options?.deploy_mode {
         case .appstore:
-            verbose(message: "*** -- START UPLOAD TO APPSTORE")
             uploadToAppStore(apiKeyPath: .userDefined(ENV.fastlane_itc_apikey_path.value))
-            verbose(message: "*** -- FINISH UPLOAD TO APPSTORE")
             break
         case .testflight:
-            verbose(message: "*** -- START UPLOAD TO TESTFLIGHT")
-            pilot(apiKeyPath: .userDefined(ENV.fastlane_itc_apikey_path.value))
-            verbose(message: "*** -- FINISH UPLOAD TO TESTFLIGHT")
+            pilot(apiKeyPath: .userDefined(ENV.fastlane_itc_apikey_path.value), skipWaitingForBuildProcessing: .userDefined(true))
             break
         default: break
         }
+        
+        verbose(message: "*** -- FINISH UPLOAD TO \(deploy_mode_name)")
     }
     
     // MARK: - DSYMs
