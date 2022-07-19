@@ -246,9 +246,15 @@ class Fastfile: LaneFile {
             newVersion = "v\(version)(\(buildNumber))"
             if oldVersion != newVersion {
                 ExtentionTarget.allCases.forEach { extensionTarget in
+                    verbose(message: "extension target: \(extensionTarget.name)")
                     Versioning.Version.set(version, target: extensionTarget.name)
                     Versioning.BuildNumber.set(buildNumber, target: extensionTarget.name)
                 }
+                ReworkEnterprise.allTarget.forEach({ enterpriseTarget in
+                    verbose(message: "enterprise target: \(enterpriseTarget)")
+                    Versioning.Version.set(version, target: enterpriseTarget)
+                    Versioning.BuildNumber.set(buildNumber, target: enterpriseTarget)
+                })
             }
         }
         

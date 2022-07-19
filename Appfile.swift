@@ -27,3 +27,18 @@ enum ExtentionTarget: String, CaseIterable {
         }
     }
 }
+
+struct ReworkEnterprise {
+    
+    static var allTarget: [String] {
+        let targets = ["ReWork"] + ExtentionTarget.allCases.map({ $0.name })
+        let suffix = "Enterprise"
+        return targets.map({ "\($0) \(suffix)" })
+    }
+
+    static var allIdentifiers: [String] {
+        let baseIdentifier = "com.rework.app.enterprise"
+        let extensionIdentifiers = ExtentionTarget.allCases.map({ $0.appIdentifier(baseIdentifier) })
+        return [baseIdentifier] + extensionIdentifiers
+    }
+}
