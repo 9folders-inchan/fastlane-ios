@@ -55,7 +55,6 @@ extension ENV {
                 }
                 return "* [\(title)]\(space) : \(element.value)"
             })
-            .compactMap({ $0 })
             .joined(separator: "\n")
         Self.print(text: text)
     }
@@ -79,12 +78,28 @@ extension Collection where Self == LaneContextType {
         return self["BUILD_NUMBER"] as? String ?? ""
     }
     
+    var LATEST_VERSION: String {
+        return self["LATEST_VERSION"] as? String ?? ""
+    }
+    
+    var LATEST_BUILD_NUMBER: String {
+        let key = "LATEST_BUILD_NUMBER"
+        if let value = self.filter({ $0.key == key }).map({ $0 }).first {
+            return "\(value)"
+        }
+        return ""
+    }
+    
     var LATEST_TESTFLIGHT_VERSION: String {
         return self["LATEST_TESTFLIGHT_VERSION"] as? String ?? ""
     }
 
     var LATEST_TESTFLIGHT_BUILD_NUMBER: String {
-        return self["LATEST_TESTFLIGHT_BUILD_NUMBER"] as? String ?? ""
+        let key = "LATEST_TESTFLIGHT_BUILD_NUMBER"
+        if let value = self.filter({ $0.key == key }).map({ $0 }).first {
+            return "\(value)"
+        }
+        return ""
     }
 
     var DSYM_PATHS: [String] {
@@ -113,5 +128,7 @@ extension Collection where Self == LaneContextType {
         verbose(message: text)
     }
 }
+
+
 
 

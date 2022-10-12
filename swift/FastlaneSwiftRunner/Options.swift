@@ -157,6 +157,15 @@ extension Options {
         }
     }
     
+    var sync_version_to_last_online_version: Bool {
+        get {
+            return self["sync_version_to_last_online_version"] == "true"
+        }
+        set {
+            self["sync_version_to_last_online_version"] = (newValue == true) ? "true" : "false"
+        }
+    }
+
 }
 
 

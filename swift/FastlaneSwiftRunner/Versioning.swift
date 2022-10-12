@@ -78,17 +78,153 @@ struct Versioning {
             }
         }
         
-        static func appstore(_ completion: Completion?) {
+        static func testflgiht(_ completion: Completion?) {
             if laneContext().LATEST_TESTFLIGHT_VERSION.isEmpty || laneContext().LATEST_TESTFLIGHT_BUILD_NUMBER.isEmpty {
                 latestTestflightBuildNumber(apiKeyPath: .userDefined(ENV.fastlane_itc_apikey_path.value), appIdentifier: appIdentifier, username: .userDefined(appleID), teamId: .userDefined(ENV.fastlane_itc_team_id.value))
-                completion?(laneContext().LATEST_TESTFLIGHT_VERSION, laneContext().LATEST_TESTFLIGHT_BUILD_NUMBER)
+            }
+            completion?(laneContext().LATEST_TESTFLIGHT_VERSION, laneContext().LATEST_TESTFLIGHT_BUILD_NUMBER)
+        }
 
+        static func appstore(_ completion: Completion?) {
+            if laneContext().LATEST_VERSION.isEmpty || laneContext().LATEST_BUILD_NUMBER.isEmpty {
+                appStoreBuildNumber(apiKeyPath: .userDefined(ENV.fastlane_itc_apikey_path.value), initialBuildNumber: "1", appIdentifier: appIdentifier, live: .userDefined(true))
             }
-            else {
-                completion?(laneContext().LATEST_TESTFLIGHT_VERSION, laneContext().LATEST_TESTFLIGHT_BUILD_NUMBER)
-            }
+            completion?(laneContext().LATEST_VERSION, laneContext().LATEST_BUILD_NUMBER)
         }
     }
+    
+    struct VersionElement: Equatable {
+        
+        var stringValue: String {
+            return [major, minor, patch].filter({ $0 != NSNotFound }).map({ String($0) }).joined(separator: ".")
+        }
+        
+        var major: Int = NSNotFound
+        var minor: Int = NSNotFound
+        var patch: Int = NSNotFound
+        
+        init(stringValue: String) {
+            
+            let components: [Int] = stringValue
+                .replacingOccurrences(of: "v", with: "")
+                .components(separatedBy: ".")
+                .compactMap({ Int($0) })
+            verbose(message: "components: \(components)")
+            
+            for i in 0..<components.count {
+                let intValue = components[i]
+                switch i {
+                case 0:
+                    self.major = intValue
+                    break
+                case 1:
+                    self.minor = intValue
+                    break
+                case 2:
+                    self.patch = intValue
+                    break
+                default:
+                    break
+                }
+            }
+            verbose(message: "major: \(self.major), minor: \(self.minor), patch: \(self.patch), stringValue: \(self.stringValue)")
+        }
+        
+        static func > (lhs: Self, rhs: Self) -> Bool {
+            return lhs.major > rhs.major
+            || lhs.minor > rhs.minor
+            || lhs.patch > rhs.patch
+        }
+        
+        static func == (lhs: Self, rhs: Self) -> Bool {
+            return lhs.stringValue == rhs.stringValue
+        }
+
+    }
+    
+    struct BuildElement {
+        let stringValue: String
+        var intValue: Int {
+            return Int(stringValue) ?? 0
+        }
+        
+        init(stringValue: String) {
+            self.stringValue = stringValue
+        }
+        
+        static func > (lhs: Self, rhs: Self) -> Bool {
+            return lhs.intValue > rhs.intValue
+        }
+        
+        static func == (lhs: Self, rhs: Self) -> Bool {
+            return lhs.stringValue == rhs.stringValue
+        }
+
+    }
+    
+    struct VersionInfo: Equatable {
+        
+        init(version: String, build: String) {
+            self.version = VersionElement(stringValue: version)
+            self.build = BuildElement(stringValue: build)
+            verbose(message: "VersionInfo build1: \(build)")
+            verbose(message: "VersionInfo build2: \(self.build.stringValue)")
+
+        }
+        
+        let version: VersionElement
+        let build: BuildElement
+        
+        static func > (lhs: Self, rhs: Self) -> Bool {
+            return lhs.version > rhs.version
+            && lhs.build > rhs.build
+        }
+        
+        static func == (lhs: Self, rhs: Self) -> Bool {
+            return lhs.version == rhs.version
+            && lhs.build == rhs.build
+        }
+
+    }
+
+    static func sync(_ completion: Fetch.Completion?) {
+
+        var lastUploadVersion: VersionInfo?
+        var liveVersion: VersionInfo?
+        
+        Versioning.Fetch.testflgiht { version, buildNumber in
+            lastUploadVersion = VersionInfo(version: version, build: buildNumber)
+        }
+        
+        Versioning.Fetch.appstore { version, buildNumber in
+            liveVersion = VersionInfo(version: version, build: buildNumber)
+        }
+
+        if let liveVersion = liveVersion, let lastUploadVersion = lastUploadVersion {
+            
+            if liveVersion.version == lastUploadVersion.version {
+                let version = liveVersion.version.stringValue
+                let buildNumber = lastUploadVersion.build.intValue > liveVersion.build.intValue ? lastUploadVersion.build.stringValue : liveVersion.build.stringValue
+                Self.Version.set(version)
+                Self.BuildNumber.set(buildNumber)
+                completion?(liveVersion.version.stringValue, buildNumber)
+            }
+            else if (liveVersion.version > lastUploadVersion.version) {
+                let version = lastUploadVersion.version > liveVersion.version ? lastUploadVersion.version.stringValue : liveVersion.version.stringValue
+                let buildNumber = lastUploadVersion.build > liveVersion.build ? lastUploadVersion.build.stringValue : liveVersion.build.stringValue
+                Self.Version.set(version)
+                Self.BuildNumber.set(buildNumber)
+                completion?(liveVersion.version.stringValue, buildNumber)
+            }
+            else {
+                completion?("", "")
+            }
+        }
+        else {
+            completion?("", "")
+        }
+    }
+
     
     struct SelectionMode: Choosable {
         

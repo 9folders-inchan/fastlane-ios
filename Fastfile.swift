@@ -195,13 +195,22 @@ class Fastfile: LaneFile {
      $ fastlane versioning versioning_mode:selection
     */
     func versioningLane(withOptions options: Options?) {
-        guard let versioning_mode = options?.versioning_mode else {
+        guard var versioning_mode = options?.versioning_mode else {
             verbose(message: "*** -- PASSING Versining")
             return
         }
         
         verbose(message: "*** -- START Versining: \(versioning_mode)")
 
+        if options?.sync_version_to_last_online_version == true {
+            Versioning.sync { version, buildNumber in
+                let isSynced = version.count > 0 && buildNumber.count > 0
+                if isSynced {
+                    versioning_mode = .bump(.patch)
+                }
+            }
+        }
+            
         var oldVersion: String? = nil
         var newVersion: String? = nil
 
@@ -262,7 +271,7 @@ class Fastfile: LaneFile {
         let new = newVersion ?? "unknow"
         verbose(message: "*** -- FINISH Versioning: \(old) -> \(new)")
     }
-    
+
     /**
      Build
      
